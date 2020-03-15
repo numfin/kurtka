@@ -13,7 +13,9 @@
     "build:ts": "tsc"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "types/",
+    "tsconfig.json"
   ],
   "keywords": [],
   "author": "",
