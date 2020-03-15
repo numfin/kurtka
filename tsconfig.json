@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "declaration": true,
+    "declarationDir": "dist",
+    "target": "es2019",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "sourceMap": true,
+    "paths": {
+      "~/*": ["./src/*"]
+    }
+  },
+  "include": ["src/client/index.ts", "types/global.d.ts"],
+  "exclude": ["node_modules"]
+}
