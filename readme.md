@@ -4,4 +4,4 @@
 
 Typescript, jsx, reactivity, small size;
 
-Example is here: [https://github.com/numfin/Kurtka-example](https://github.com/numfin/Kurtka-example)
+Example is here: [https://github.com/numfin/Kurtka-example](https://github.com/numfin/kurtka-example)
