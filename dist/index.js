@@ -1,18 +1,5 @@
 function createNodeHtml(tag, attrs, children) {
-    const fragments = document.createDocumentFragment();
-    children.forEach(child => {
-        if (["string", "number"].includes(typeof child)) {
-            fragments.appendChild(document.createTextNode(String(child)));
-        }
-        else if (typeof child === "object") {
-            fragments.appendChild(child.el);
-        }
-        else {
-            console.warn(`idk this element ${el}`);
-        }
-    });
     const el = document.createElement(tag);
-    el.appendChild(fragments);
     if (attrs) {
         const { events, style, ...attributes } = attrs;
         Object.assign(el, attributes);
@@ -21,46 +8,79 @@ function createNodeHtml(tag, attrs, children) {
             el.addEventListener(event, (...args) => handler(...args));
         });
     }
-    return { type: Kurtka.NodeType.html, el, children };
-}
-//# sourceMappingURL=nodeHtml.js.map
-
-const cache = new Map();
-function createNodeComponent(C, attrs) {
-    // cache component with key
-    const cached = cache.get(attrs === null || attrs === void 0 ? void 0 : attrs.key);
-    const component = cached !== null && cached !== void 0 ? cached : new C(attrs);
-    if (!cached && (attrs === null || attrs === void 0 ? void 0 : attrs.key)) {
-        cache.set(attrs === null || attrs === void 0 ? void 0 : attrs.key, component);
-    }
-    const { state } = component;
-    const node = component.render();
-    // proxy render function
-    component.render = new Proxy(component.render, {
-        apply(target, ctx, args) {
-            const updatedEl = target.apply(ctx, args);
-            node.el.replaceWith(updatedEl.el);
-            node.el = updatedEl.el;
-            return updatedEl;
+    return function renderHtml() {
+        function replaceNodes(root, childs) {
+            childs.forEach((child, i) => {
+                let node;
+                if (typeof child === "function") {
+                    const c = child();
+                    if (Array.isArray(c)) {
+                        return replaceNodes(el, c);
+                    }
+                    else {
+                        node = c;
+                    }
+                }
+                else {
+                    node = document.createTextNode(String(child));
+                }
+                const cached = root.childNodes[i];
+                if (cached) {
+                    if (!cached.isEqualNode(node)) {
+                        root.replaceChild(node, cached);
+                    }
+                }
+                else {
+                    root.appendChild(node);
+                }
+            });
         }
-    });
-    // call render when state updates
-    if (state) {
-        component.state = new Proxy(state, {
-            set(target, prop, value) {
-                target[prop] = value;
-                component.render();
-                return true;
-            }
-        });
-    }
-    return {
-        type: Kurtka.NodeType.component,
-        component,
-        el: node.el,
-        children: []
+        replaceNodes(el, children);
+        return el;
     };
 }
+
+function makeReactive(item, reactFn) {
+    if (Array.isArray(item)) {
+        return new Proxy(item.map((v) => makeReactive(v, reactFn)), {
+            set(target, key, value) {
+                if (key !== "length") {
+                    target[key] = value;
+                    reactFn();
+                }
+                return true;
+            },
+        });
+    }
+    else if (typeof item === "object") {
+        Object.entries(item).forEach(([k, v]) => {
+            item[k] = makeReactive(v, reactFn);
+        });
+        return new Proxy(item, {
+            set(a, b, c) {
+                a[b] = c;
+                reactFn();
+                return true;
+            },
+        });
+    }
+    else {
+        return item;
+    }
+}
+//# sourceMappingURL=makeReactive.js.map
+
+function createNodeComponent(C, attrs) {
+    const component = new C(attrs);
+    const node = component.render();
+    if (component.state) {
+        component.state = makeReactive(component.state, node);
+    }
+    return function renderComponent() {
+        return node();
+    };
+}
+//# sourceMappingURL=nodeComponent.js.map
 
 function createNode(tag, attrs, ...children) {
     if (typeof tag === "function") {
@@ -84,7 +104,7 @@ const NodeType = {
 };
 //# sourceMappingURL=Component.js.map
 
-const Kurtka$1 = {
+const Kurtka = {
     createNode,
     Component,
     NodeType
@@ -92,10 +112,10 @@ const Kurtka$1 = {
 //# sourceMappingURL=Kurtka.js.map
 
 function createApp(app, parent) {
-    parent === null || parent === void 0 ? void 0 : parent.replaceWith(app.el);
+    parent === null || parent === void 0 ? void 0 : parent.replaceWith(app());
     return app;
 }
 //# sourceMappingURL=createApp.js.map
 
-export { Kurtka$1 as Kurtka, createApp };
+export { Kurtka, createApp };
 //# sourceMappingURL=index.js.map

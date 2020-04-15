@@ -1,34 +1,19 @@
 declare namespace Kurtka {
-  type Attrs = null | dom.BaseAttributes;
+    type Attrs = null | dom.BaseAttributes;
 
-  class Component {
-    key: Symbol;
-    props?: Record<string, unknown>;
-    state?: Record<string, unknown>;
+    class Component {
+        key: Symbol;
+        props?: Record<string, unknown>;
+        state?: Record<string, unknown>;
 
-    constructor(props: { key: Symbol } & Record<string, unknown>);
-    render(): NodeHtml;
-  }
+        constructor(props: { key: Symbol } & Record<string, unknown>);
+        render(): NodeHtml;
+    }
 
-  function createNode(): Node;
+    function createNode(): Node;
 
-  enum NodeType {
-    html,
-    component
-  }
+    type NodeHtml = () => HTMLElement;
+    type NodeComponent = () => HTMLElement;
 
-  interface NodeHtml {
-    type: NodeType;
-    el: HTMLElement;
-    children: Node[];
-  }
-
-  interface NodeComponent {
-    type: NodeType;
-    el: HTMLElement;
-    component: Component;
-    children: Node[];
-  }
-
-  type Node = NodeHtml | NodeComponent | string | number;
+    type Node = NodeHtml | NodeComponent | string | number;
 }

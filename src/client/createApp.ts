@@ -1,4 +1,4 @@
 export function createApp(app: Kurtka.NodeComponent, parent: Element) {
-  parent?.replaceWith(app.el);
-  return app;
+    parent?.replaceWith(app());
+    return app;
 }
