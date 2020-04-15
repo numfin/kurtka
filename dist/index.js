@@ -39,13 +39,14 @@ function createNodeHtml(tag, attrs, children) {
         return el;
     };
 }
+//# sourceMappingURL=nodeHtml.js.map
 
 function makeReactive(item, reactFn) {
     if (Array.isArray(item)) {
         return new Proxy(item.map((v) => makeReactive(v, reactFn)), {
             set(target, key, value) {
                 if (key !== "length") {
-                    target[key] = value;
+                    target[key] = makeReactive(value, reactFn);
                     reactFn();
                 }
                 return true;
@@ -57,8 +58,8 @@ function makeReactive(item, reactFn) {
             item[k] = makeReactive(v, reactFn);
         });
         return new Proxy(item, {
-            set(a, b, c) {
-                a[b] = c;
+            set(target, key, value) {
+                target[key] = makeReactive(value, reactFn);
                 reactFn();
                 return true;
             },
@@ -68,7 +69,6 @@ function makeReactive(item, reactFn) {
         return item;
     }
 }
-//# sourceMappingURL=makeReactive.js.map
 
 function createNodeComponent(C, attrs) {
     const component = new C(attrs);
@@ -80,7 +80,6 @@ function createNodeComponent(C, attrs) {
         return node();
     };
 }
-//# sourceMappingURL=nodeComponent.js.map
 
 function createNode(tag, attrs, ...children) {
     if (typeof tag === "function") {
@@ -88,6 +87,7 @@ function createNode(tag, attrs, ...children) {
     }
     return createNodeHtml(tag, attrs, children);
 }
+//# sourceMappingURL=createNode.js.map
 
 class Component {
     constructor() {

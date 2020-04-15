@@ -5,7 +5,7 @@ export function makeReactive<T extends any>(item: T, reactFn: Function): T {
             {
                 set(target, key, value) {
                     if (key !== "length") {
-                        target[key as number] = value;
+                        target[key as number] = makeReactive(value, reactFn);
                         reactFn();
                     }
                     return true;
@@ -17,8 +17,8 @@ export function makeReactive<T extends any>(item: T, reactFn: Function): T {
             item[k] = makeReactive(v, reactFn);
         });
         return new Proxy(item as any, {
-            set(a, b, c) {
-                a[b] = c;
+            set(target, key, value) {
+                target[key] = makeReactive(value, reactFn);
                 reactFn();
                 return true;
             },
