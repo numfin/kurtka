@@ -2,7 +2,8 @@ export declare class Component implements Kurtka.Component {
     key: symbol;
     props?: Record<string, unknown>;
     state?: Record<string, unknown>;
+    node: Kurtka.Node;
     constructor();
-    render(): Kurtka.NodeHtml;
+    render(): Kurtka.Node;
+    update(): HTMLElement;
 }
-export declare const NodeType: Record<keyof typeof Kurtka.NodeType, string>;

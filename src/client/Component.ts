@@ -2,14 +2,13 @@ export class Component implements Kurtka.Component {
   key = Symbol();
   props?: Record<string, unknown> = {};
   state?: Record<string, unknown>;
+  node: Kurtka.Node = () => null!;
 
   constructor() {}
-  render(): Kurtka.NodeHtml {
+  render(): Kurtka.Node {
     return null!;
   }
+  update(): HTMLElement {
+    return this.node() as any;
+  }
 }
-
-export const NodeType: Record<keyof typeof Kurtka.NodeType, string> = {
-  html: "html",
-  component: "component"
-};

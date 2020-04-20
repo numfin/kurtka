@@ -1,3 +1,6 @@
 import { Tags } from "./Tags";
 import { Attrs } from "./Attrs";
-export declare function createNodeHtml(tag: Tags, attrs: Attrs, children: Kurtka.Node[]): Kurtka.Node;
+declare type NodeHTML = Kurtka.Node | string | number;
+declare type Children = NodeHTML | (() => Kurtka.Node[]);
+export declare function createNodeHtml(tag: Tags, attrs: Attrs, childrens: Children[]): Kurtka.Node;
+export {};

@@ -1,1 +1,1 @@
-export declare function createApp(app: Kurtka.NodeComponent, parent: Element): Kurtka.NodeComponent;
+export declare function createApp(app: Kurtka.Node, parent: Element): Kurtka.Node;

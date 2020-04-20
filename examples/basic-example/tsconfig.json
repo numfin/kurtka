@@ -1,25 +1,18 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "declaration": true,
-    "declarationDir": "dist",
     "target": "es2019",
     "module": "esnext",
     "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
     "paths": {
-      "~/*": ["./src/*"]
+      "@/*": ["./src/*"]
     },
     "jsx": "react",
     "jsxFactory": "Kurtka.createNode",
-    "esModuleInterop": true
+    "types": ["../../types/global"]
   },
-  "include": [
-    "src/client/**.ts",
-    "types/global.d.ts"
-    // "src/**/*.test.tsx",
-    // "src/**/*.test.ts"
-  ],
+  "include": ["src/main.tsx"],
   "exclude": ["node_modules"]
 }

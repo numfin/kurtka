@@ -8,9 +8,10 @@
     "url": "https://github.com/numfin/kurtka"
   },
   "scripts": {
-    "dev": "npm run build -- -w",
-    "build": "rm -rf dist && rollup -c rollup.config.js",
-    "build:ts": "tsc"
+    "dev": "webpack -w --mode=development",
+    "build": "webpack --mode=production",
+    "build:ts": "tsc",
+    "test": "jest"
   },
   "files": [
     "dist/",
@@ -20,16 +21,34 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "ts-loader": "^7.0.0",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  },
   "devDependencies": {
     "@babel/core": "^7.8.7",
     "@babel/preset-env": "^7.8.7",
+    "@babel/preset-typescript": "^7.9.0",
     "@rollup/plugin-alias": "^3.0.1",
     "@rollup/plugin-replace": "^2.3.1",
+    "@rollup/plugin-sucrase": "^3.0.0",
+    "@rollup/plugin-typescript": "^4.1.1",
+    "@sucrase/webpack-loader": "^2.0.0",
+    "@types/jest": "^25.2.1",
+    "@zerollup/ts-transform-paths": "^1.7.17",
+    "clean-webpack-plugin": "^3.0.0",
+    "jest": "^25.3.0",
+    "jest-puppeteer": "^4.4.0",
+    "prettier": "^2.0.4",
+    "puppeteer": "^3.0.0",
     "rollup": "^2.0.6",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.26.0",
+    "sucrase": "^3.13.0",
+    "ts-jest": "^25.3.1",
+    "tsconfig-paths": "^3.9.0",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   }
